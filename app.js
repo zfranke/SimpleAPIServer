@@ -5,7 +5,7 @@ const fs = require('fs');
 
 //Logging Setup
 const EventEmitter = require('events');
-var myEventEmitter = new EventEmitter();
+var myEmitter = new EventEmitter();
 
 const multer = require('multer');
 const PORT = 99;
@@ -26,25 +26,25 @@ function getTimeStamp() {
 //Emitter for when the program Starts, write the results with timestamp to the log file
 myEmitter.on('start', function () {
     var timestamp = getTimeStamp();
-    fs.appendFileSync('Logs\applicationLog.log', timestamp + ": Program Started\n");
+    fs.appendFileSync('Logs/application.log', timestamp + ": Program Started\n");
 });
 
 //Emitter for when / is called, write the results with timestamp to the log file
 myEmitter.on('home', function () {
     var timestamp = getTimeStamp();
-    fs.appendFileSync('Logs\applicationLog.log', timestamp + ": Home Page Accessed\n");
+    fs.appendFileSync('Logs/application.log', timestamp + ": Home Page Accessed\n");
 });
 
 //Emitter for when math is called, write the results with timestamp to the log file
 myEmitter.on('math', function () {
     var timestamp = getTimeStamp();
-    fs.appendFileSync('Logs\applicationLog.log', timestamp + ": Math Page Accessed\n");
+    fs.appendFileSync('Logs/application.log', timestamp + ": Math Page Accessed\n");
 });
 
 //Emitter for when get /mathHandler is called, write the results with timestamp to the log file
 myEmitter.on('mathHandle', function (num1, num2, result) {
     var timestamp = getTimeStamp();
-    fs.appendFileSync('Logs\applicationLog.log', timestamp + ": Math Page Accessed, Num1: " + num1 + ", Num2: " + num2 + ", Result: " + result + "\n");
+    fs.appendFileSync('Logs/application.log', timestamp + ": Math Page Accessed, Num1: " + num1 + ", Num2: " + num2 + ", Result: " + result + "\n");
 });
 
 /**
@@ -57,7 +57,7 @@ myEmitter.on('mathHandle', function (num1, num2, result) {
  * 
  */
 app.get('/', (req, res, next) => {
-    myEventEmitter.emit('home');
+    myEmitter.emit('home');
     res.send(` 
         <h1>Simple API Server</h1>
         <p>Written by Zach Franke</p>
@@ -79,7 +79,7 @@ app.get('/', (req, res, next) => {
  **/
 
 app.get("/math", (req, res) => {
-    myEventEmitter.emit('math');
+    myEmitter.emit('math');
     res.send(` 
     <h1>Basic Math API Online</h1>
     <p>Written by Zach Franke</p>
@@ -122,7 +122,7 @@ app.post("/mathHandler", (req, res) => {
         <p>${result}</p>
         <input type="button" value="Back" onclick="history.back()">
         `);
-    myEventEmitter.emit('mathHandle', num1, num2, result);
+    myEmitter.emit('mathHandle', num1, num2, result);
 })
 
 
